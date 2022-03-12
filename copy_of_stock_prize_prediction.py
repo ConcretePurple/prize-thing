@@ -1,5 +1,12 @@
-# Can you see this line of code
-#Hi Jahnavi here
+'''
+QUICK NOTE:
+I FINISHED TILL CNN PART, 
+https://colab.research.google.com/drive/1edTyMelBp442Jt7JS83JDzjR2RADQJDg?usp=sharing
+USE THIS FILE AND IF YOU CANT FIND THE REQUIRED FILES OR FOR WHATEVER REASON THE REQUIRED FILES DONT POP UP, 
+PLEASE DOWNLOAD THE FILES FROM THE DIRECTORY
+
+ALSO SCROLL DOWN TO THE LATEST THING
+'''
 
 # -*- coding: utf-8 -*-
 """Copy of stock prize prediction.ipynb
@@ -204,3 +211,293 @@ for i in range(5):
     model_adam_relu.fit(x_train,y_train, validation_data=(x_test,y_test),callbacks=[monitor,checkpointer],verbose=2,epochs=1000)
 
 model_adam_relu.load_weights('best_weights_adam_relu.hdf5') # load weights from best model
+
+'''
+------------------------------------------------
+(multi line comment)
+12-3-22 (Saksham Tehri) starting from here
+also have to make sure that this runs like one single python file and that the output we wanna get is at the last
+not in between since the code is from jupyter nb/google collab, thats why we gotta make sure about it
+'''
+
+from sklearn.metrics import r2_score
+pred = model_adam_relu.predict(x_test)
+print("Shape: {}".format(pred.shape))
+score = np.sqrt(metrics.mean_squared_error(pred,y_test))
+print("Final score (RMSE): {}".format(score))
+print('R2 score: %2f' % r2_score(y_test,pred))
+# Plot the chart
+chart_regression(pred.flatten()[0:100],y_test[0:100])
+
+
+#Activation: Relu 
+#Optimization: Sgd
+#2 Hidden Layers: 50 and 25 neaurons respectively
+
+#checkpointer
+checkpointer = ModelCheckpoint(filepath="best_weights_sgd_relu.hdf5", verbose=0, save_best_only=True) # save best model
+for i in range(5):
+    print(i)
+    
+    model_sgd_relu = Sequential()
+    
+    # 50 neurons in 1st hidden layer
+    model_sgd_relu.add(Dense(50, input_dim=x_train.shape[1], activation='relu')) # Hidden 1 
+
+    # 25 neurons in 2nd hidden layer
+    model_sgd_relu.add(Dense(25, activation='relu')) # Hidden 2
+    
+    model_sgd_relu.add(Dense(1)) # Output
+
+    # optimizer - Back Prop algo
+    model_sgd_relu.compile(loss='mean_squared_error', optimizer='sgd')
+
+    #  monitor
+    monitor = EarlyStopping(monitor='val_loss', min_delta=1e-3, patience=3, verbose=2, mode='auto')
+
+    # epochs can be increased 500 or 1000
+    model_sgd_relu.fit(x_train,y_train, validation_data=(x_test,y_test),callbacks=[monitor,checkpointer],verbose=2,epochs=1000)
+
+model_sgd_relu.load_weights('best_weights_sgd_relu.hdf5') # load weights from best model
+
+
+from sklearn.metrics import r2_score
+pred = model_sgd_relu.predict(x_test)
+print("Shape: {}".format(pred.shape))
+score = np.sqrt(metrics.mean_squared_error(pred,y_test))
+print("Final score (RMSE): {}".format(score))
+print('R2 score: %2f' % r2_score(y_test,pred))
+# Plot the chart
+chart_regression(pred.flatten()[0:100],y_test[0:100])
+
+
+#Activation: Relu 
+#Optimization: Rmsprop
+#2 Hidden Layers: 50 and 25 neaurons respectively
+
+#checkpointer
+checkpointer = ModelCheckpoint(filepath="best_weights_rmsprop_relu.hdf5", verbose=0, save_best_only=True) # save best model
+for i in range(5):
+    print(i)
+    
+    model_rmsprop_relu = Sequential()
+    
+    # 50 neurons in 1st hidden layer
+    model_rmsprop_relu.add(Dense(50, input_dim=x_train.shape[1], activation='relu')) # Hidden 1 
+
+    # 25 neurons in 2nd hidden layer
+    model_rmsprop_relu.add(Dense(25, activation='relu')) # Hidden 2
+    
+    model_rmsprop_relu.add(Dense(1)) # Output
+
+    # optimizer - Back Prop algo
+    model_rmsprop_relu.compile(loss='mean_squared_error', optimizer='rmsprop')
+
+    #  monitor
+    monitor = EarlyStopping(monitor='val_loss', min_delta=1e-3, patience=3, verbose=2, mode='auto')
+
+    # epochs can be increased 500 or 1000
+    model_rmsprop_relu.fit(x_train,y_train, validation_data=(x_test,y_test),callbacks=[monitor,checkpointer],verbose=2,epochs=1000)
+
+model_rmsprop_relu.load_weights('best_weights_rmsprop_relu.hdf5') # load weights from best model
+
+
+from sklearn.metrics import r2_score
+pred = model_rmsprop_relu.predict(x_test)
+print("Shape: {}".format(pred.shape))
+score = np.sqrt(metrics.mean_squared_error(pred,y_test))
+print("Final score (RMSE): {}".format(score))
+print('R2 score: %2f' % r2_score(y_test,pred))
+# Plot the chart
+chart_regression(pred.flatten()[0:100],y_test[0:100])
+
+
+#Activation: Sigmoid 
+#Optimization: Rmsprop
+#2 Hidden Layers: 50 and 25 neaurons respectively
+
+#checkpointer
+checkpointer = ModelCheckpoint(filepath="best_weights_rmsprop_sigmoid.hdf5", verbose=0, save_best_only=True) # save best model
+for i in range(5):
+    print(i)
+    
+    model_rmsprop_sigmoid = Sequential()
+    
+    # 50 neurons in 1st hidden layer
+    model_rmsprop_sigmoid.add(Dense(50, input_dim=x_train.shape[1], activation='sigmoid')) # Hidden 1 
+
+    # 25 neurons in 2nd hidden layer
+    model_rmsprop_sigmoid.add(Dense(25, activation='sigmoid')) # Hidden 2
+    
+    model_rmsprop_sigmoid.add(Dense(1)) # Output
+
+    # optimizer - Back Prop algo
+    model_rmsprop_sigmoid.compile(loss='mean_squared_error', optimizer='rmsprop')
+
+    #  monitor
+    monitor = EarlyStopping(monitor='val_loss', min_delta=1e-3, patience=3, verbose=2, mode='auto')
+
+    # epochs can be increased 500 or 1000
+    model_rmsprop_sigmoid.fit(x_train,y_train, validation_data=(x_test,y_test),callbacks=[monitor,checkpointer],verbose=2,epochs=1000)
+
+model_rmsprop_sigmoid.load_weights('best_weights_rmsprop_sigmoid.hdf5') # load weights from best model
+
+
+from sklearn.metrics import r2_score
+pred = model_rmsprop_sigmoid.predict(x_test)
+print("Shape: {}".format(pred.shape))
+score = np.sqrt(metrics.mean_squared_error(pred,y_test))
+print("Final score (RMSE): {}".format(score))
+print('R2 score: %2f' % r2_score(y_test,pred))
+# Plot the chart
+chart_regression(pred.flatten()[0:100],y_test[0:100])
+
+
+#LSTM
+df_stock_close = df_stock['Close'].tolist()
+
+encode_numeric_range(df_stock, 'Close')
+# df_stock
+
+# df_stock_close
+
+
+#Preparing x and y
+SEQUENCE_SIZE = 7
+x_lstm,y_lstm = to_sequences(SEQUENCE_SIZE, df_stock.values, df_stock_close)
+#x_test,y_test = to_sequences(SEQUENCE_SIZE, df_test, close_test)
+
+print("Shape of x: {}".format(x_lstm.shape))
+print("Shape of y: {}".format(y_lstm.shape))
+
+#Splitting data into 70% training and 30% test set
+x_train_lstm,x_test_lstm,y_train_lstm,y_test_lstm = train_test_split(x_lstm,y_lstm, test_size=0.3, random_state =42)
+print("Shape of x_train: {}".format(x_train_lstm.shape))
+print("Shape of x_test: {}".format(x_test_lstm.shape))
+print("Shape of y_train: {}".format(y_train_lstm.shape))
+print("Shape of y_test: {}".format(y_test_lstm.shape))
+
+#LSTM neuron: 100
+#Optimization: Adam
+#No drop out layer
+
+#checkpointer
+checkpointer = ModelCheckpoint(filepath="best_weights.hdf5", verbose=0, save_best_only=True) # save best model
+for i in range(5):
+    print(i)    
+    print('Build model...')
+    model = Sequential()
+    model.add(LSTM(100, dropout=0.1, recurrent_dropout=0.1, input_shape=(7, 5)))
+    model.add(Dense(50))
+    model.add(Dense(1))
+    model.compile(loss='mean_squared_error', optimizer='adam')
+    monitor = EarlyStopping(monitor='val_loss', min_delta=1e-3, patience=5, verbose=1, mode='auto')
+    print('Train...')
+    model.fit(x_train_lstm,y_train_lstm,validation_data=(x_test_lstm,y_test_lstm),callbacks=[monitor,checkpointer],verbose=2, epochs=10) 
+model.load_weights('best_weights.hdf5')
+
+
+from sklearn import metrics
+
+pred = model.predict(x_test_lstm)
+score = np.sqrt(metrics.mean_squared_error(pred,y_test_lstm))
+print("Score (RMSE): {}".format(score))
+print('R2 score: %2f' % r2_score(y_test_lstm,pred))
+# Plot the chart
+chart_regression(pred.flatten()[0:100],y_test_lstm[0:100])
+#pred
+
+
+#LSTM neuron: 100
+#Optimization: Adam
+#With drop out layer
+
+#checkpointer
+checkpointer = ModelCheckpoint(filepath="best_weights.hdf5", verbose=0, save_best_only=True) # save best model
+for i in range(5):
+    print(i)    
+    print('Build model...')
+    model = Sequential()
+    model.add(LSTM(100, dropout=0.1, recurrent_dropout=0.1, input_shape=(7, 5)))
+    model.add(Dropout(0.1))
+    model.add(Dense(50))
+    model.add(Dense(1))
+    model.compile(loss='mean_squared_error', optimizer='adam')
+    monitor = EarlyStopping(monitor='val_loss', min_delta=1e-3, patience=5, verbose=1, mode='auto')
+    print('Train...')
+    model.fit(x_train_lstm,y_train_lstm,validation_data=(x_test_lstm,y_test_lstm),callbacks=[monitor,checkpointer],verbose=2, epochs=10) 
+model.load_weights('best_weights.hdf5')
+
+
+from sklearn import metrics
+
+pred = model.predict(x_test_lstm)
+score = np.sqrt(metrics.mean_squared_error(pred,y_test_lstm))
+print("Score (RMSE): {}".format(score))
+print('R2 score: %2f' % r2_score(y_test_lstm,pred))
+chart_regression(pred.flatten()[0:100],y_test_lstm[0:100])
+
+
+#LSTM neuron: 100
+#Optimization: SGD
+#With drop out layer
+
+#checkpointer
+checkpointer = ModelCheckpoint(filepath="best_weights.hdf5", verbose=0, save_best_only=True) # save best model
+for i in range(5):
+    print(i)    
+    print('Build model...')
+    model = Sequential()
+    model.add(LSTM(100, dropout=0.1, recurrent_dropout=0.1, input_shape=(7, 5)))
+    model.add(Dropout(0.1))
+    model.add(Dense(50))
+    model.add(Dense(1))
+    model.compile(loss='mean_squared_error', optimizer='adam')
+    monitor = EarlyStopping(monitor='val_loss', min_delta=1e-3, patience=5, verbose=1, mode='auto')
+    print('Train...')
+    model.fit(x_train_lstm,y_train_lstm,validation_data=(x_test_lstm,y_test_lstm),callbacks=[monitor,checkpointer],verbose=2, epochs=10) 
+model.load_weights('best_weights.hdf5')
+
+from sklearn import metrics
+
+pred = model.predict(x_test_lstm)
+score = np.sqrt(metrics.mean_squared_error(pred,y_test_lstm))
+print("Score (RMSE): {}".format(score))
+print('R2 score: %2f' % r2_score(y_test_lstm,pred))
+chart_regression(pred.flatten()[0:100],y_test_lstm[0:100])
+
+
+#LSTM neuron: 500
+#Optimization: Rmsprop
+#With drop out layer
+
+#checkpointer
+checkpointer = ModelCheckpoint(filepath="best_weights.hdf5", verbose=0, save_best_only=True) # save best model
+for i in range(5):
+    print(i)    
+    print('Build model...')
+    model = Sequential()
+    model.add(LSTM(500, dropout=0.1, recurrent_dropout=0.1, input_shape=(7, 5)))
+    model.add(Dropout(0.5))
+    model.add(Dense(50))
+    model.add(Dense(1))
+    model.compile(loss='mean_squared_error', optimizer='rmsprop')
+    monitor = EarlyStopping(monitor='val_loss', min_delta=1e-3, patience=5, verbose=1, mode='auto')
+    print('Train...')
+    model.fit(x_train_lstm,y_train_lstm,validation_data=(x_test_lstm,y_test_lstm),callbacks=[monitor,checkpointer],verbose=2, epochs=10) 
+model.load_weights('best_weights.hdf5')
+
+
+from sklearn import metrics
+
+pred = model.predict(x_test_lstm)
+score = np.sqrt(metrics.mean_squared_error(pred,y_test_lstm))
+print("Score (RMSE): {}".format(score))
+print('R2 score: %2f' % r2_score(y_test_lstm,pred))
+chart_regression(pred.flatten()[0:100],y_test_lstm[0:100])
+
+
+# START FROM CNN NOW, I FINISHED THE PARTS BEFORE THAT
+# https://colab.research.google.com/drive/1edTyMelBp442Jt7JS83JDzjR2RADQJDg?usp=sharing 
+
+
