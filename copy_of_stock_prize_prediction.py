@@ -496,6 +496,46 @@ print("Score (RMSE): {}".format(score))
 print('R2 score: %2f' % r2_score(y_test_lstm,pred))
 chart_regression(pred.flatten()[0:100],y_test_lstm[0:100])
 
+def to_sequences1(seq_size, df ,data):
+    x = []
+    y = []
+
+    for i in range(len(data)-SEQUENCE_SIZE-1):
+        #print(i)
+        window = df[i:(i+SEQUENCE_SIZE)]
+        after_window = data[i+SEQUENCE_SIZE]
+        window = [[x] for x in window]
+       #print("{} - {}".format(window,after_window))
+        x.append(window)
+        y.append(after_window)
+        
+    return np.array(x),np.array(y)
+#SEQUENCE_SIZE = 7
+#x_train1,y_train1 = to_sequences1(SEQUENCE_SIZE, df_train,close_train)
+#x_test1,y_test1 = to_sequences1(SEQUENCE_SIZE, df_test, close_test)
+#print("Shape of x_train: {}".format(x_train1.shape))
+#print("Shape of x_test: {}".format(x_test1.shape))
+#print("Shape of y_train: {}".format(y_train1.shape))
+#print("Shape of y_test: {}".format(y_test1.shape))
+
+#Preparing x and y
+SEQUENCE_SIZE = 7
+x_cnn,y_cnn = to_sequences1(SEQUENCE_SIZE, df_stock.values, df_stock_close)
+
+print("Shape of x: {}".format(x_cnn.shape))
+print("Shape of y: {}".format(y_cnn.shape))
+#Splitting data into 70% training and 30% test set
+x_train1,x_test1,y_train1,y_test1 = train_test_split(x_cnn,y_cnn, test_size=0.3, random_state =42)
+print("Shape of x_train: {}".format(x_train1.shape))
+print("Shape of x_test: {}".format(x_test1.shape))
+print("Shape of y_train: {}".format(y_train1.shape))
+print("Shape of y_test: {}".format(y_test1.shape))
+#Splitting data into 70% training and 30% test set
+x_train1,x_test1,y_train1,y_test1 = train_test_split(x_cnn,y_cnn, test_size=0.3, random_state =42)
+print("Shape of x_train: {}".format(x_train1.shape))
+print("Shape of x_test: {}".format(x_test1.shape))
+print("Shape of y_train: {}".format(y_train1.shape))
+print("Shape of y_test: {}".format(y_test1.shape))
 
 # START FROM CNN NOW, I FINISHED THE PARTS BEFORE THAT
 # https://colab.research.google.com/drive/1edTyMelBp442Jt7JS83JDzjR2RADQJDg?usp=sharing 
