@@ -537,7 +537,7 @@ print("Shape of y_test: {}".format(y_test1.shape))
 
 
 
-from keras.optimizers import Adam
+from tensorflow.keras.optimizers import Adam
 # Define batch_size and # of epochs
 batch_size = 128
 #kernel size = 2,1 
