@@ -748,4 +748,4 @@ print("Score (RMSE): {}".format(score))
 print('R2 score: %2f' % r2_score(y_test1,pred))
 chart_regression(pred.flatten()[0:100],y_test1[0:100])
 
-#done everything before addititional features - Saksham
+#done everything before addititional features - Saksham Tehri
