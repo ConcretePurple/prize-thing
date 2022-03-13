@@ -537,7 +537,215 @@ print("Shape of x_test: {}".format(x_test1.shape))
 print("Shape of y_train: {}".format(y_train1.shape))
 print("Shape of y_test: {}".format(y_test1.shape))
 
-# START FROM CNN NOW, I FINISHED THE PARTS BEFORE THAT
-# https://colab.research.google.com/drive/1edTyMelBp442Jt7JS83JDzjR2RADQJDg?usp=sharing 
 
 
+from keras.optimizers import Adam
+# Define batch_size and # of epochs
+batch_size = 128
+#kernel size = 2,1 
+#kernel number = 32,64
+#activation='relu'
+#optimizer='adam'
+import time
+checkpointer = ModelCheckpoint(filepath="best_weights_cnn_extra.hdf5", verbose=0, save_best_only=True) # save best model
+
+model_cnn = Sequential()
+model_cnn.add(Conv2D(32, kernel_size=(2, 1), strides=(1, 1),activation='relu', padding='valid',input_shape=(7,1,5)))
+model_cnn.add(MaxPooling2D(pool_size=(1, 1), strides=(1, 1)))
+model_cnn.add(Conv2D(64, (2, 1), activation='relu'))
+model_cnn.add(MaxPooling2D(pool_size=(1, 1)))
+model_cnn.add(Flatten())
+model_cnn.add(Dense(1000, activation='relu'))
+model_cnn.add(Dense(1))
+    
+model_cnn.compile(loss='mean_squared_error', optimizer=Adam(lr=0.001, decay=1e-6), metrics=['accuracy'])
+monitor = EarlyStopping(monitor='val_loss', min_delta=1e-3, patience=2, verbose=2, mode='auto')
+
+start_time = time.time()
+
+model_cnn.fit(x_train1,y_train1,
+              batch_size=batch_size,
+              epochs=10,
+              verbose=2,
+              callbacks=[monitor,checkpointer],
+              validation_data=(x_test1,y_test1))
+
+elapsed_time = time.time() - start_time
+print("Elapsed time: {}".format(hms_string(elapsed_time)))
+model_cnn.load_weights('best_weights_cnn_extra.hdf5') # load weights from best model
+
+pred = model_cnn.predict(x_test1)
+score = np.sqrt(metrics.mean_squared_error(pred,y_test1))
+print("Score (RMSE): {}".format(score))
+print('R2 score: %2f' % r2_score(y_test1,pred))
+chart_regression(pred.flatten()[0:100],y_test1[0:100])
+
+
+
+#from keras.optimizers import Adam
+# Define batch_size and # of epochs
+batch_size = 128
+#kernel size = 3,1 
+#kernel number = 64,128
+#activation='sigmoid'
+#optimizer='rmsprop'
+import time
+checkpointer = ModelCheckpoint(filepath="best_weights_cnn_extra.hdf5", verbose=0, save_best_only=True) # save best model
+
+model_cnn = Sequential()
+model_cnn.add(Conv2D(64, kernel_size=(3, 1), strides=(1, 1),activation='sigmoid', padding='valid',input_shape=(7,1,5)))
+model_cnn.add(MaxPooling2D(pool_size=(1, 1), strides=(1, 1)))
+model_cnn.add(Conv2D(128, (3, 1), activation='sigmoid'))
+model_cnn.add(MaxPooling2D(pool_size=(1, 1)))
+model_cnn.add(Flatten())
+model_cnn.add(Dense(1000, activation='sigmoid'))
+model_cnn.add(Dense(1))
+    
+#model_cnn.compile(loss='mean_squared_error', optimizer=Adam(lr=0.001, decay=1e-6), metrics=['accuracy'])
+#monitor = EarlyStopping(monitor='val_loss', min_delta=1e-3, patience=2, verbose=2, mode='auto')
+
+model_cnn.compile(loss='mean_squared_error', optimizer='rmsprop')
+monitor = EarlyStopping(monitor='val_loss', min_delta=1e-3, patience=5, verbose=1, mode='auto')
+
+start_time = time.time()
+
+#model_cnn.fit(x_train1,y_train1,validation_data=(x_test,y_test),callbacks=[monitor,checkpointer],verbose=2, epochs=10) 
+model_cnn.fit(x_train1,y_train1,batch_size=batch_size,epochs=10,verbose=2,callbacks=[monitor,checkpointer],validation_data=(x_test1,y_test1))
+
+elapsed_time = time.time() - start_time
+print("Elapsed time: {}".format(hms_string(elapsed_time)))
+model_cnn.load_weights('best_weights_cnn_extra.hdf5') # load weights from best model
+
+
+pred = model_cnn.predict(x_test1)
+score = np.sqrt(metrics.mean_squared_error(pred,y_test1))
+print("Score (RMSE): {}".format(score))
+print('R2 score: %2f' % r2_score(y_test1,pred))
+chart_regression(pred.flatten()[0:100],y_test1[0:100])
+
+
+#from keras.optimizers import Adam
+# Define batch_size and # of epochs
+batch_size = 128
+#kernel size = 2,1 
+#kernel number = 32,64
+#activation='tanh'
+#optimizer='rmsprop'
+import time
+checkpointer = ModelCheckpoint(filepath="best_weights_cnn_extra.hdf5", verbose=0, save_best_only=True) # save best model
+
+model_cnn = Sequential()
+model_cnn.add(Conv2D(32, kernel_size=(2, 1), strides=(1, 1),activation='tanh', padding='valid',input_shape=(7,1,5)))
+model_cnn.add(MaxPooling2D(pool_size=(1, 1), strides=(1, 1)))
+model_cnn.add(Conv2D(64, (2, 1), activation='tanh'))
+model_cnn.add(MaxPooling2D(pool_size=(1, 1)))
+model_cnn.add(Flatten())
+model_cnn.add(Dense(1000, activation='tanh'))
+model_cnn.add(Dense(1))
+    
+#model_cnn.compile(loss='mean_squared_error', optimizer=Adam(lr=0.001, decay=1e-6), metrics=['accuracy'])
+#monitor = EarlyStopping(monitor='val_loss', min_delta=1e-3, patience=2, verbose=2, mode='auto')
+
+model_cnn.compile(loss='mean_squared_error', optimizer='rmsprop')
+monitor = EarlyStopping(monitor='val_loss', min_delta=1e-3, patience=5, verbose=1, mode='auto')
+
+start_time = time.time()
+
+#model_cnn.fit(x_train1,y_train1,validation_data=(x_test,y_test),callbacks=[monitor,checkpointer],verbose=2, epochs=10) 
+model_cnn.fit(x_train1,y_train1,batch_size=batch_size,epochs=10,verbose=2,callbacks=[monitor,checkpointer],validation_data=(x_test1,y_test1))
+
+elapsed_time = time.time() - start_time
+print("Elapsed time: {}".format(hms_string(elapsed_time)))
+model_cnn.load_weights('best_weights_cnn_extra.hdf5') # load weights from best model
+
+
+pred = model_cnn.predict(x_test1)
+score = np.sqrt(metrics.mean_squared_error(pred,y_test1))
+print("Score (RMSE): {}".format(score))
+print('R2 score: %2f' % r2_score(y_test1,pred))
+chart_regression(pred.flatten()[0:100],y_test1[0:100])
+
+
+#from keras.optimizers import Adam
+# Define batch_size and # of epochs
+batch_size = 128
+#kernel size = 4,1 and 4,1 
+#kernel number = 64,128
+#activation='relu'
+#optimizer='adam'
+#With dropout layer
+import time
+checkpointer = ModelCheckpoint(filepath="best_weights_cnn_extra.hdf5", verbose=0, save_best_only=True) # save best model
+
+model_cnn = Sequential()
+model_cnn.add(Conv2D(64, kernel_size=(4, 1), strides=(1, 1),activation='relu', padding='valid',input_shape=(7,1,5)))
+model_cnn.add(MaxPooling2D(pool_size=(1, 1), strides=(1, 1)))
+model_cnn.add(Conv2D(128, (4, 1), activation='relu'))
+model_cnn.add(MaxPooling2D(pool_size=(1, 1)))
+model_cnn.add(Flatten())
+model_cnn.add(Dense(500, activation='relu'))
+model_cnn.add(Dropout(0.1))
+model_cnn.add(Dense(1))
+    
+model_cnn.compile(loss='mean_squared_error', optimizer=Adam(lr=0.001, decay=1e-6), metrics=['accuracy'])
+monitor = EarlyStopping(monitor='val_loss', min_delta=1e-3, patience=2, verbose=2, mode='auto')
+
+start_time = time.time()
+
+#model_cnn.fit(x_train1,y_train1,validation_data=(x_test,y_test),callbacks=[monitor,checkpointer],verbose=2, epochs=10) 
+model_cnn.fit(x_train1,y_train1,batch_size=batch_size,epochs=10,verbose=2,callbacks=[monitor,checkpointer],validation_data=(x_test1,y_test1))
+
+elapsed_time = time.time() - start_time
+print("Elapsed time: {}".format(hms_string(elapsed_time)))
+model_cnn.load_weights('best_weights_cnn_extra.hdf5') # load weights from best model
+
+
+
+pred = model_cnn.predict(x_test1)
+score = np.sqrt(metrics.mean_squared_error(pred,y_test1))
+print("Score (RMSE): {}".format(score))
+print('R2 score: %2f' % r2_score(y_test1,pred))
+chart_regression(pred.flatten()[0:100],y_test1[0:100])
+
+
+#from keras.optimizers import Adam
+# Define batch_size and # of epochs
+batch_size = 128
+#kernel size = 2,1 and 2,1 
+#kernel number = 32,64
+#activation='relu'
+#optimizer='adam'
+#With dropout layer
+import time
+checkpointer = ModelCheckpoint(filepath="best_weights_cnn_extra.hdf5", verbose=0, save_best_only=True) # save best model
+
+model_cnn = Sequential()
+model_cnn.add(Conv2D(32, kernel_size=(2, 1), strides=(1, 1),activation='relu', padding='valid',input_shape=(7,1,5)))
+model_cnn.add(MaxPooling2D(pool_size=(1, 1), strides=(1, 1)))
+model_cnn.add(Conv2D(64, (2, 1), activation='relu'))
+model_cnn.add(MaxPooling2D(pool_size=(1, 1)))
+model_cnn.add(Flatten())
+model_cnn.add(Dense(1000, activation='relu'))
+model_cnn.add(Dropout(0.1))
+model_cnn.add(Dense(1))
+    
+model_cnn.compile(loss='mean_squared_error', optimizer=Adam(lr=0.001, decay=1e-6), metrics=['accuracy'])
+monitor = EarlyStopping(monitor='val_loss', min_delta=1e-3, patience=2, verbose=2, mode='auto')
+
+start_time = time.time()
+
+#model_cnn.fit(x_train1,y_train1,validation_data=(x_test,y_test),callbacks=[monitor,checkpointer],verbose=2, epochs=10) 
+model_cnn.fit(x_train1,y_train1,batch_size=batch_size,epochs=10,verbose=2,callbacks=[monitor,checkpointer],validation_data=(x_test1,y_test1))
+
+elapsed_time = time.time() - start_time
+print("Elapsed time: {}".format(hms_string(elapsed_time)))
+model_cnn.load_weights('best_weights_cnn_extra.hdf5') # load weights from best model
+
+
+pred = model_cnn.predict(x_test1)
+score = np.sqrt(metrics.mean_squared_error(pred,y_test1))
+print("Score (RMSE): {}".format(score))
+print('R2 score: %2f' % r2_score(y_test1,pred))
+chart_regression(pred.flatten()[0:100],y_test1[0:100])
+
+#done everything before addititional features - Saksham
